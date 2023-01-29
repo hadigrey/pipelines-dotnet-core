@@ -14,5 +14,6 @@ variables:
 
 steps:
 - task: UseDotNet@2
-  input:
+  inputs:
+    packageType: runtime
     version: '6.x'

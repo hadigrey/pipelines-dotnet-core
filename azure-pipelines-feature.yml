@@ -14,5 +14,5 @@ variables:
 
 steps:
 - task: UseDotNet@2
-  input:
+  inputs:
     version: '6.x'
