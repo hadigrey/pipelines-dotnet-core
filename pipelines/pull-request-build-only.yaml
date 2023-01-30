@@ -1,0 +1,24 @@
+pr:
+  autoCancel: true
+  branches:
+    include:
+    - feature/*
+    - bugfix/*
+    exclude:
+    - release/*
+    - develop
+    - main
+  paths:
+    exclude:
+    - pipelines/*
+
+variables:
+  solution: 'pipelines-dotnet-core.sln'
+  projectName: 'pipelines-dotnet-core'
+
+stages:
+- template: templates/build.yaml
+  parameters:
+    buildConfiguration: 'Release'
+    solution: '$(solution)'
+    projectName: '$(projectName)'

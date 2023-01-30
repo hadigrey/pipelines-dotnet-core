@@ -5,4 +5,8 @@
     <AspNetCoreHostingModel>InProcess</AspNetCoreHostingModel>
     <RootNamespace>pipelines_dotnet_core</RootNamespace>
   </PropertyGroup>
+
+  <ItemGroup>
+    <Folder Include="pipelines\" />
+  </ItemGroup>
 </Project>

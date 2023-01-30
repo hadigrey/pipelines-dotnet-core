@@ -1,0 +1,41 @@
+parameters:
+ buildConfiguration: ''
+ solution: ''
+ projectName: ''
+stages:
+- stage: Build
+  dependsOn:
+  pool:
+    name: Azure Pipelines
+    vmImage: 'windows-2022'
+  jobs:
+  - job: 'Build And Publish'
+    steps:
+    - checkout: self 
+      fetchDepth: 1 # shallow clone to speed it up
+      submodules: true
+
+    - task: NuGetToolInstaller@1 
+      displayName: Install NuGet
+
+    - task: NuGetCommand@2
+      displayName: NuGet Restore
+      inputs:
+        restoreSolution: ${{ parameters.solution }}
+
+    - task: VSBuild@1
+      displayName: Build
+      inputs:
+        solution: ${{ parameters.solution }}
+        msbuildArgs: '/p:DeployOnBuild=true /p:WebPublishMethod=Package /p:PackageAsSingleFile=true /p:SkipInvalidConfigurations=true /p:PackageLocation="$(Build.ArtifactStagingDirectory)\${{ parameters.adminProjectName }}" /p:TransformWebConfigEnabled=false /p:AutoParameterizationWebConfigConnectionStrings=false /p:MarkWebConfigAssistFilesAsExclude=false /p:ProfileTransformWebConfigEnabled=false /p:IsTransformWebConfigDisabled=true'
+        platform: 'Any CPU'
+        configuration: ${{ parameters.buildConfiguration }}
+        logFileVerbosity: minimal
+        clean: true
+
+    - task: PublishPipelineArtifact@1
+      inputs:
+        targetPath: '$(Build.ArtifactStagingDirectory)' 
+        artifactName: 'drop' 
+        artifactType: 'pipeline'
+        parallel: true

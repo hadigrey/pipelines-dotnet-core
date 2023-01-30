@@ -1,0 +1,16 @@
+trigger:
+- develop
+
+pr: none
+
+variables:
+  solution: 'pipelines-dotnet-core.sln'
+  projectName: 'pipelines-dotnet-core'
+  package: '$(Agent.BuildDirectory)\drop\$(projectName)\pipelines-dotnet-core.zip'
+
+stages:
+- template: templates/build.yaml
+  parameters:
+    buildConfiguration: 'Release'
+    solution: '$(solution)'
+    projectName: '$(projectName)'
